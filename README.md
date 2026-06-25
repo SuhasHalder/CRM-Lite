@@ -19,6 +19,7 @@ A full-stack Sales CRM built for small teams. Manage leads, visualize your pipel
 - [Database Models](#database-models)
 - [User Roles](#user-roles)
 - [Available Scripts](#available-scripts)
+- [Deploying to Vercel](#deploying-to-vercel)
 
 ---
 
@@ -534,6 +535,68 @@ Protected routes require header: `Authorization: Bearer <token>`
                                               │  (Atlas/local)  │
                                               └─────────────────┘
 ```
+
+---
+
+## Deploying to Vercel
+
+Vercel hosts the **frontend only**. The Express backend must be deployed separately (e.g. Render, Railway, Fly.io).
+
+### Why you may see `404: NOT_FOUND`
+
+This project is a **monorepo**. The Next.js app lives in the `frontend/` folder, not the repository root. If Vercel's **Root Directory** is left blank, it deploys the wrong folder and `/` returns 404.
+
+### Verified locally
+
+- `frontend/src/app/page.tsx` exists (home page `/`)
+- `npm run build` inside `frontend/` succeeds and lists route `/`
+
+### Vercel settings (required)
+
+In **Vercel → Project → Settings → General**:
+
+| Setting | Value |
+|---------|-------|
+| **Root Directory** | `frontend` |
+| **Framework Preset** | Next.js |
+| **Build Command** | *(default)* `next build` |
+| **Output Directory** | *(leave empty)* |
+| **Install Command** | *(default)* `npm install` |
+
+Then go to **Deployments → Redeploy** (use "Redeploy with existing Build Cache" unchecked for a clean build).
+
+### Environment variables (Vercel)
+
+In **Settings → Environment Variables**, add:
+
+| Name | Example value |
+|------|----------------|
+| `NEXT_PUBLIC_API_URL` | `https://your-backend.onrender.com/api/v1` |
+
+Use your **live backend URL**, not `localhost`. Without this, the site loads but login/API calls fail.
+
+### Backend deployment (separate)
+
+Deploy `backend/` to a Node host and set these env vars there:
+
+- `PORT` (often set by the host)
+- `MONGODB_URI`
+- `JWT_SECRET`
+- `JWT_EXPIRES_IN`
+
+### GitHub checklist
+
+Before redeploying, confirm your repo contains:
+
+```
+SalesCRM/
+├── frontend/
+│   ├── package.json
+│   └── src/app/page.tsx
+└── backend/
+```
+
+Push latest code to the branch Vercel watches (usually `main`).
 
 ---
 
