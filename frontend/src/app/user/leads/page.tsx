@@ -4,6 +4,18 @@ import apiClient from "@/lib/api";
 import { getApiErrorMessage } from "@/lib/api-error";
 import type { Lead } from "@/lib/types";
 import UserLayout from "@/components/user/UserLayout";
+import PageHeader from "@/components/ui/PageHeader";
+import LoadingState from "@/components/ui/LoadingState";
+import EmptyState from "@/components/ui/EmptyState";
+
+const statusColors: Record<string, string> = {
+  new: "bg-blue-50 text-blue-700 border-blue-100",
+  contacted: "bg-violet-50 text-violet-700 border-violet-100",
+  qualified: "bg-amber-50 text-amber-700 border-amber-100",
+  proposal: "bg-teal-50 text-teal-700 border-teal-100",
+  won: "bg-emerald-50 text-emerald-700 border-emerald-100",
+  lost: "bg-red-50 text-red-700 border-red-100",
+};
 
 export default function UserLeadsPage() {
   const [leads, setLeads] = useState<Lead[]>([]);
@@ -25,75 +37,54 @@ export default function UserLeadsPage() {
     }
   };
 
-  const statusColors: Record<string, string> = {
-    new: "bg-blue-100 text-blue-800",
-    contacted: "bg-violet-100 text-violet-800",
-    qualified: "bg-amber-100 text-amber-800",
-    proposal: "bg-teal-100 text-teal-800",
-    won: "bg-green-100 text-green-800",
-    lost: "bg-red-100 text-red-800",
-  };
-
   return (
     <UserLayout>
       <div className="space-y-6">
-        <div className="flex justify-between items-start flex-wrap gap-4">
-          <div>
-            <h1 className="text-2xl font-semibold text-gray-900">My Leads</h1>
-            <p className="text-sm text-gray-500 mt-1">
-              Manage and track every prospect in your pipeline.
-            </p>
-          </div>
-          <button className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition">
-            + Add Lead
-          </button>
-        </div>
+        <PageHeader
+          title="My Leads"
+          description="Manage and track every prospect in your pipeline."
+          action={<button className="btn-primary px-4 py-2 text-sm">+ Add Lead</button>}
+        />
 
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 p-4 rounded-lg text-sm">
-            {error}
-          </div>
+          <div className="bg-red-50 border border-red-100 text-red-700 p-4 rounded-xl text-sm">{error}</div>
         )}
 
         {loading ? (
-          <div className="text-center py-12 text-gray-400">Loading leads...</div>
+          <LoadingState message="Loading leads..." />
+        ) : leads.length === 0 ? (
+          <EmptyState title="No leads yet" description="Add your first lead to start building your pipeline." />
         ) : (
-          <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50 border-b">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Title</th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Company</th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Value</th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Status</th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {leads.length === 0 ? (
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-slate-50/80 border-b border-slate-100">
                   <tr>
-                    <td colSpan={5} className="px-6 py-12 text-center">
-                      <p className="text-gray-500 text-sm">No leads yet.</p>
-                      <p className="text-gray-400 text-xs mt-1">Add your first lead to start building your pipeline.</p>
-                    </td>
+                    {["Title", "Company", "Value", "Status", "Actions"].map((h) => (
+                      <th key={h} className="px-6 py-3.5 text-left text-[11px] font-semibold text-slate-400 uppercase tracking-wider">{h}</th>
+                    ))}
                   </tr>
-                ) : (
-                  leads.map((lead) => (
-                    <tr key={lead._id} className="border-b hover:bg-gray-50 transition">
-                      <td className="px-6 py-4 text-sm font-medium text-gray-800">{lead.title}</td>
-                      <td className="px-6 py-4 text-sm text-gray-600">{lead.company}</td>
-                      <td className="px-6 py-4 text-sm text-gray-600">${lead.value.toLocaleString()}</td>
+                </thead>
+                <tbody className="divide-y divide-slate-50">
+                  {leads.map((lead) => (
+                    <tr key={lead._id} className="table-row-hover transition">
+                      <td className="px-6 py-4 text-sm font-semibold text-slate-800">{lead.title}</td>
+                      <td className="px-6 py-4 text-sm text-slate-500">{lead.company}</td>
+                      <td className="px-6 py-4 text-sm font-medium text-slate-700">${lead.value.toLocaleString()}</td>
                       <td className="px-6 py-4 text-sm">
-                        <span className={`inline-block px-2.5 py-1 rounded-full text-xs capitalize ${statusColors[lead.status] || "bg-gray-100 text-gray-800"}`}>
+                        <span className={`badge border capitalize ${statusColors[lead.status] || "bg-slate-50 text-slate-700 border-slate-100"}`}>
                           {lead.status}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-sm text-blue-600">Edit · Delete</td>
+                      <td className="px-6 py-4 text-sm">
+                        <button className="text-blue-600 hover:text-blue-700 font-medium mr-3 transition">Edit</button>
+                        <button className="text-red-500 hover:text-red-600 font-medium transition">Delete</button>
+                      </td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
       </div>

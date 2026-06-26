@@ -1,6 +1,7 @@
 "use client";
 
 import AdminLayout from "@/components/admin/AdminLayout";
+import PageHeader from "@/components/ui/PageHeader";
 
 const pipelineData = {
   New: [
@@ -65,46 +66,36 @@ export default function PipelinePage() {
   return (
     <AdminLayout>
       <div className="space-y-8">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div>
-            <h1 className="text-4xl font-bold text-gray-800">
-              Sales Pipeline
-            </h1>
-
-            <p className="text-gray-500 mt-2">
-              Track lead progress through every stage of the sales cycle.
-            </p>
-          </div>
-
-          <button className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl shadow-md transition">
-            + Add Opportunity
-          </button>
-        </div>
+        <PageHeader
+          title="Sales Pipeline"
+          description="Track lead progress through every stage of the sales cycle."
+          badge="Kanban view"
+          action={<button className="btn-primary px-5 py-2.5 text-sm">+ Add Opportunity</button>}
+        />
 
         {/* Pipeline Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-5">
-          <div className="bg-white rounded-2xl shadow-md p-5">
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm card-hover p-5">
             <h3 className="text-sm text-gray-500">New Leads</h3>
             <p className="text-3xl font-bold text-gray-800 mt-2">12</p>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-md p-5">
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm card-hover p-5">
             <h3 className="text-sm text-gray-500">Contacted</h3>
             <p className="text-3xl font-bold text-yellow-600 mt-2">8</p>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-md p-5">
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm card-hover p-5">
             <h3 className="text-sm text-gray-500">Qualified</h3>
             <p className="text-3xl font-bold text-blue-600 mt-2">15</p>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-md p-5">
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm card-hover p-5">
             <h3 className="text-sm text-gray-500">Won Deals</h3>
             <p className="text-3xl font-bold text-green-600 mt-2">6</p>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-md p-5">
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm card-hover p-5">
             <h3 className="text-sm text-gray-500">Lost Deals</h3>
             <p className="text-3xl font-bold text-red-500 mt-2">3</p>
           </div>
@@ -197,7 +188,7 @@ export default function PipelinePage() {
         </div>
 
         {/* Bottom Summary */}
-        <div className="bg-white rounded-2xl shadow-md p-6">
+        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm card-hover p-6">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div>
               <h2 className="text-2xl font-bold text-gray-800">

@@ -4,6 +4,9 @@ import apiClient from "@/lib/api";
 import { getApiErrorMessage } from "@/lib/api-error";
 import type { Task } from "@/lib/types";
 import UserLayout from "@/components/user/UserLayout";
+import PageHeader from "@/components/ui/PageHeader";
+import LoadingState from "@/components/ui/LoadingState";
+import EmptyState from "@/components/ui/EmptyState";
 
 export default function UserTasksPage() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -40,70 +43,60 @@ export default function UserTasksPage() {
   return (
     <UserLayout>
       <div className="space-y-6">
-        <div className="flex justify-between items-start flex-wrap gap-4">
-          <div>
-            <h1 className="text-2xl font-semibold text-gray-900">My Tasks</h1>
-            <p className="text-sm text-gray-500 mt-1">
-              {pending} open · {done} completed
-            </p>
-          </div>
-          <button className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition">
-            + Add Task
-          </button>
-        </div>
+        <PageHeader
+          title="My Tasks"
+          description={`${pending} open · ${done} completed`}
+          badge={`${pending} pending`}
+          action={<button className="btn-primary px-4 py-2 text-sm">+ Add Task</button>}
+        />
 
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 p-4 rounded-lg text-sm">
-            {error}
-          </div>
+          <div className="bg-red-50 border border-red-100 text-red-700 p-4 rounded-xl text-sm">{error}</div>
         )}
 
         {loading ? (
-          <div className="text-center py-12 text-gray-400">Loading tasks...</div>
+          <LoadingState message="Loading tasks..." />
+        ) : tasks.length === 0 ? (
+          <EmptyState title="No tasks yet" description="Create a task to stay organized and never miss a deadline." />
         ) : (
           <div className="space-y-3">
-            {tasks.length === 0 ? (
-              <div className="text-center py-12 bg-white rounded-xl border border-gray-100">
-                <p className="text-gray-500 text-sm">No tasks yet.</p>
-                <p className="text-gray-400 text-xs mt-1">Create a task to stay organized and never miss a deadline.</p>
-              </div>
-            ) : (
-              tasks.map((task) => (
-                <div
-                  key={task._id}
-                  className={`bg-white p-4 rounded-xl border border-gray-100 shadow-sm border-l-4 ${
-                    task.isDone ? "border-l-green-500 opacity-75" : "border-l-blue-600"
-                  }`}
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1">
-                      <h3 className={`font-medium text-gray-800 ${task.isDone ? "line-through text-gray-400" : ""}`}>
-                        {task.title}
-                      </h3>
-                      {task.description && (
-                        <p className="text-sm text-gray-600 mt-1">{task.description}</p>
-                      )}
-                      {task.dueDate && (
-                        <p className="text-xs text-gray-400 mt-2">
-                          Due: {new Date(task.dueDate).toLocaleDateString()}
-                        </p>
-                      )}
-                    </div>
-                    <button
-                      onClick={() => handleComplete(task._id)}
-                      className={`px-3 py-1.5 rounded-lg text-sm transition ${
-                        task.isDone
-                          ? "bg-green-100 text-green-800 cursor-default"
-                          : "bg-blue-600 text-white hover:bg-blue-700"
-                      }`}
-                      disabled={task.isDone}
-                    >
-                      {task.isDone ? "Done" : "Complete"}
-                    </button>
+            {tasks.map((task) => (
+              <div
+                key={task._id}
+                className={`bg-white p-5 rounded-2xl border border-slate-100 shadow-sm border-l-4 card-hover ${
+                  task.isDone ? "border-l-emerald-500 opacity-75" : "border-l-blue-600"
+                }`}
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex-1">
+                    <h3 className={`font-semibold text-slate-800 ${task.isDone ? "line-through text-slate-400" : ""}`}>
+                      {task.title}
+                    </h3>
+                    {task.description && <p className="text-sm text-slate-500 mt-1">{task.description}</p>}
+                    {task.dueDate && (
+                      <p className="text-xs text-slate-400 mt-2 flex items-center gap-1">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                          <circle cx="6" cy="6" r="5" stroke="currentColor" strokeWidth="1" />
+                          <path d="M6 3v3l2 1" stroke="currentColor" strokeWidth="1" strokeLinecap="round" />
+                        </svg>
+                        Due: {new Date(task.dueDate).toLocaleDateString()}
+                      </p>
+                    )}
                   </div>
+                  <button
+                    onClick={() => handleComplete(task._id)}
+                    className={`px-4 py-2 rounded-xl text-sm font-medium transition ${
+                      task.isDone
+                        ? "bg-emerald-50 text-emerald-700 cursor-default"
+                        : "btn-primary"
+                    }`}
+                    disabled={task.isDone}
+                  >
+                    {task.isDone ? "✓ Done" : "Complete"}
+                  </button>
                 </div>
-              ))
-            )}
+              </div>
+            ))}
           </div>
         )}
       </div>

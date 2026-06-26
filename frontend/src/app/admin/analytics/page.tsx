@@ -1,31 +1,22 @@
 "use client";
 
 import AdminLayout from "@/components/admin/AdminLayout";
+import PageHeader from "@/components/ui/PageHeader";
 
 export default function AnalyticsPage() {
   return (
     <AdminLayout>
       <div className="space-y-8">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div>
-            <h1 className="text-4xl font-bold text-gray-800">
-              Sales Analytics
-            </h1>
-
-            <p className="text-gray-500 mt-2">
-              Monitor sales performance, revenue growth, and team productivity.
-            </p>
-          </div>
-
-          <button className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl shadow-md transition">
-            Download Report
-          </button>
-        </div>
+        <PageHeader
+          title="Sales Analytics"
+          description="Monitor sales performance, revenue growth, and team productivity."
+          badge="Insights"
+          action={<button className="btn-primary px-5 py-2.5 text-sm">Download Report</button>}
+        />
 
         {/* Top Analytics Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
-          <div className="bg-white rounded-2xl shadow-md p-6">
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm card-hover p-6">
             <h3 className="text-sm text-gray-500">
               Total Revenue
             </h3>
@@ -39,7 +30,7 @@ export default function AnalyticsPage() {
             </p>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-md p-6">
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm card-hover p-6">
             <h3 className="text-sm text-gray-500">
               Conversion Rate
             </h3>
@@ -53,7 +44,7 @@ export default function AnalyticsPage() {
             </p>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-md p-6">
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm card-hover p-6">
             <h3 className="text-sm text-gray-500">
               Active Leads
             </h3>
@@ -67,7 +58,7 @@ export default function AnalyticsPage() {
             </p>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-md p-6">
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm card-hover p-6">
             <h3 className="text-sm text-gray-500">
               Team Productivity
             </h3>
@@ -85,7 +76,7 @@ export default function AnalyticsPage() {
         {/* Analytics Charts Section */}
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
           {/* Revenue Chart */}
-          <div className="xl:col-span-2 bg-white rounded-2xl shadow-md p-6">
+          <div className="xl:col-span-2 bg-white rounded-2xl border border-slate-100 shadow-sm card-hover p-6">
             <div className="flex items-center justify-between mb-8">
               <h2 className="text-2xl font-semibold text-gray-800">
                 Revenue Overview
@@ -134,7 +125,7 @@ export default function AnalyticsPage() {
           </div>
 
           {/* Performance Summary */}
-          <div className="bg-white rounded-2xl shadow-md p-6">
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm card-hover p-6">
             <h2 className="text-2xl font-semibold text-gray-800 mb-8">
               Team Performance
             </h2>
@@ -203,7 +194,7 @@ export default function AnalyticsPage() {
         {/* Bottom Cards */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Lead Sources */}
-          <div className="bg-white rounded-2xl shadow-md p-6">
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm card-hover p-6">
             <h2 className="text-2xl font-semibold text-gray-800 mb-6">
               Lead Sources
             </h2>
@@ -250,7 +241,7 @@ export default function AnalyticsPage() {
           </div>
 
           {/* Recent Activities */}
-          <div className="bg-white rounded-2xl shadow-md p-6">
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm card-hover p-6">
             <h2 className="text-2xl font-semibold text-gray-800 mb-6">
               Recent Activities
             </h2>

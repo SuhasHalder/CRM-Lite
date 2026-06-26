@@ -1,162 +1,99 @@
 "use client";
 
 import AdminLayout from "@/components/admin/AdminLayout";
+import PageHeader from "@/components/ui/PageHeader";
+import { getStoredUser } from "@/lib/auth";
+import type { User } from "@/lib/types";
 
 export default function ProfilePage() {
+  const user: User | null = getStoredUser();
+  const initials = user?.name
+    ? user.name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()
+    : "AD";
+
   return (
     <AdminLayout>
-      <div className="space-y-8">
-        {/* Header */}
-        <div>
-          <h1 className="text-4xl font-bold text-gray-800">
-            Admin Profile
-          </h1>
+      <div className="space-y-6">
+        <PageHeader
+          title="Admin Profile"
+          description="Manage your account settings and personal information."
+        />
 
-          <p className="text-gray-500 mt-2">
-            Manage your account settings and personal information.
-          </p>
-        </div>
-
-        {/* Profile Card */}
-        <div className="bg-white rounded-2xl shadow-md p-8">
-          <div className="flex flex-col md:flex-row gap-8 items-center">
-            {/* Avatar */}
-            <div className="w-32 h-32 rounded-full bg-blue-100 flex items-center justify-center text-5xl font-bold text-blue-600">
-              A
-            </div>
-
-            {/* Info */}
-            <div className="flex-1">
-              <h2 className="text-3xl font-bold text-gray-800">
-                Admin User
-              </h2>
-
-              <p className="text-gray-500 mt-2">
-                admin@salescrm.com
-              </p>
-
-              <div className="flex flex-wrap gap-3 mt-5">
-                <span className="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium">
-                  Administrator
-                </span>
-
-                <span className="bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-medium">
-                  Active
-                </span>
-              </div>
-            </div>
-
-            {/* Button */}
-            <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl shadow-md transition">
-              Edit Profile
-            </button>
-          </div>
-        </div>
-
-        {/* Account Settings */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Personal Info */}
-          <div className="bg-white rounded-2xl shadow-md p-6">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-6">
-              Personal Information
-            </h2>
-
-            <div className="space-y-5">
-              <div>
-                <label className="text-sm text-gray-500">
-                  Full Name
-                </label>
-
-                <input
-                  type="text"
-                  value="Admin User"
-                  readOnly
-                  className="w-full mt-2 border border-gray-300 rounded-xl px-4 py-3 bg-gray-50"
-                />
-              </div>
-
-              <div>
-                <label className="text-sm text-gray-500">
-                  Email Address
-                </label>
-
-                <input
-                  type="email"
-                  value="admin@salescrm.com"
-                  readOnly
-                  className="w-full mt-2 border border-gray-300 rounded-xl px-4 py-3 bg-gray-50"
-                />
-              </div>
-
-              <div>
-                <label className="text-sm text-gray-500">
-                  Phone Number
-                </label>
-
-                <input
-                  type="text"
-                  value="+91 9876543210"
-                  readOnly
-                  className="w-full mt-2 border border-gray-300 rounded-xl px-4 py-3 bg-gray-50"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Security */}
-          <div className="bg-white rounded-2xl shadow-md p-6">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-6">
-              Security Settings
-            </h2>
-
-            <div className="space-y-5">
-              <button className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 rounded-xl transition">
-                Change Password
-              </button>
-
-              <button className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 rounded-xl transition">
-                Enable Two-Factor Authentication
-              </button>
-
-              <button className="w-full bg-red-100 hover:bg-red-200 text-red-700 py-3 rounded-xl transition">
-                Logout
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Activity */}
-        <div className="bg-white rounded-2xl shadow-md p-6">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-6">
-            Recent Activity
-          </h2>
-
-          <div className="space-y-5">
-            {[
-              "Logged into the dashboard",
-              "Added a new lead",
-              "Updated pipeline status",
-              "Generated analytics report",
-            ].map((activity, index) => (
-              <div
-                key={index}
-                className="flex items-start gap-4 border-b pb-4"
-              >
-                <div className="w-3 h-3 bg-blue-500 rounded-full mt-2" />
-
-                <div>
-                  <p className="text-gray-700 font-medium">
-                    {activity}
-                  </p>
-
-                  <p className="text-sm text-gray-500 mt-1">
-                    Just now
-                  </p>
+        {user ? (
+          <>
+            <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden max-w-3xl">
+              <div className="gradient-brand px-8 py-10 relative overflow-hidden">
+                <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMiIvPjwvZz48L2c+PC9zdmc+')] opacity-50" />
+                <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+                  <div className="flex items-center gap-5">
+                    <div className="w-20 h-20 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center text-white text-2xl font-bold border border-white/30 shadow-lg">
+                      {initials}
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-bold text-white">{user.name}</h2>
+                      <p className="text-blue-100 text-sm mt-0.5">{user.email}</p>
+                      <div className="flex gap-2 mt-2">
+                        <span className="px-3 py-0.5 bg-white/20 text-white text-xs rounded-full capitalize border border-white/20 font-medium">
+                          {user.role}
+                        </span>
+                        <span className="px-3 py-0.5 bg-emerald-400/30 text-emerald-100 text-xs rounded-full border border-emerald-300/30 font-medium">
+                          Active
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <button className="px-5 py-2.5 rounded-xl bg-white text-blue-700 text-sm font-semibold hover:bg-blue-50 transition shadow-lg">
+                    Edit Profile
+                  </button>
                 </div>
               </div>
-            ))}
+
+              <div className="p-8 grid grid-cols-1 sm:grid-cols-2 gap-5">
+                {[
+                  { label: "Full Name", value: user.name },
+                  { label: "Email Address", value: user.email },
+                  { label: "Role", value: user.role, capitalize: true },
+                  { label: "Account Status", value: "Active" },
+                ].map((field) => (
+                  <div key={field.label} className="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                    <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">{field.label}</label>
+                    <p className={`text-sm font-semibold text-slate-800 mt-1.5 ${field.capitalize ? "capitalize" : ""}`}>
+                      {field.value}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 max-w-3xl">
+              <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 card-hover">
+                <h2 className="text-sm font-semibold text-slate-900 mb-4 flex items-center gap-2">
+                  <span className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-sm">🔒</span>
+                  Security Settings
+                </h2>
+                <div className="space-y-3">
+                  <button className="w-full btn-secondary px-4 py-2.5 text-sm text-left">Change Password</button>
+                  <button className="w-full btn-secondary px-4 py-2.5 text-sm text-left">Two-Factor Authentication</button>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 card-hover">
+                <h2 className="text-sm font-semibold text-slate-900 mb-4 flex items-center gap-2">
+                  <span className="w-8 h-8 rounded-lg bg-violet-50 text-violet-600 flex items-center justify-center text-sm">⚙️</span>
+                  Preferences
+                </h2>
+                <div className="space-y-3">
+                  <button className="w-full btn-secondary px-4 py-2.5 text-sm text-left">Notification Settings</button>
+                  <button className="w-full btn-secondary px-4 py-2.5 text-sm text-left">Email Preferences</button>
+                </div>
+              </div>
+            </div>
+          </>
+        ) : (
+          <div className="text-center py-16 text-slate-400 bg-white rounded-2xl border border-slate-100">
+            Please sign in to view your profile.
           </div>
-        </div>
+        )}
       </div>
     </AdminLayout>
   );

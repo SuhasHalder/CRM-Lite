@@ -6,24 +6,31 @@ import type { User } from "@/lib/types";
 export default function UserNavbar() {
   const [user] = useState<User | null>(() => getStoredUser());
 
+  const initials = user?.name
+    ? user.name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()
+    : "US";
+
   return (
-    <header className="w-full bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
+    <header className="w-full glass border-b border-slate-200/60 px-6 py-3.5 flex justify-between items-center sticky top-0 z-40">
       <div>
-        <h1 className="text-lg font-semibold text-gray-900">Sales Dashboard</h1>
-        <p className="text-xs text-gray-500">
-          Track leads, tasks, and follow-ups in one place
-        </p>
+        <h1 className="text-base font-bold text-slate-900 tracking-tight">Sales Dashboard</h1>
+        <p className="text-xs text-slate-400">Track leads, tasks, and follow-ups in one place</p>
       </div>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3">
         {user && (
-          <div className="text-right hidden sm:block">
-            <p className="text-sm font-medium text-gray-800">{user.name}</p>
-            <p className="text-xs text-gray-500">{user.email}</p>
+          <div className="flex items-center gap-3 hidden sm:flex">
+            <div className="text-right">
+              <p className="text-sm font-semibold text-slate-800">{user.name}</p>
+              <p className="text-xs text-slate-400">{user.email}</p>
+            </div>
+            <div className="w-9 h-9 rounded-xl gradient-brand flex items-center justify-center text-xs font-bold text-white shadow-sm">
+              {initials}
+            </div>
           </div>
         )}
         <button
           onClick={logout}
-          className="text-sm px-4 py-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition"
+          className="text-sm px-4 py-2 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition font-medium"
         >
           Sign out
         </button>

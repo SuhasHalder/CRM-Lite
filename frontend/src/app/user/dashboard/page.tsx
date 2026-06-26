@@ -5,6 +5,9 @@ import apiClient from "@/lib/api";
 import { getStoredUser } from "@/lib/auth";
 import type { Lead, Task, User } from "@/lib/types";
 import UserLayout from "@/components/user/UserLayout";
+import PageHeader from "@/components/ui/PageHeader";
+import StatCard from "@/components/ui/StatCard";
+import LoadingState from "@/components/ui/LoadingState";
 
 export default function UserDashboardPage() {
   const [user] = useState<User | null>(() => getStoredUser());
@@ -42,103 +45,67 @@ export default function UserDashboardPage() {
   };
 
   const statCards = [
-    {
-      label: "Active Leads",
-      value: stats.myLeads,
-      hint: "Leads assigned to you",
-      color: "text-blue-600",
-      bg: "bg-blue-50",
-      href: "/user/leads",
-    },
-    {
-      label: "Open Tasks",
-      value: stats.tasks,
-      hint: "Tasks waiting for action",
-      color: "text-amber-600",
-      bg: "bg-amber-50",
-      href: "/user/tasks",
-    },
-    {
-      label: "Won Deals",
-      value: stats.wonDeals,
-      hint: "Closed successfully",
-      color: "text-green-600",
-      bg: "bg-green-50",
-      href: "/user/pipeline",
-    },
-    {
-      label: "Follow-ups Due",
-      value: stats.followUps,
-      hint: "Scheduled reminders",
-      color: "text-purple-600",
-      bg: "bg-purple-50",
-      href: "/user/followups",
-    },
+    { label: "Active Leads", value: stats.myLeads, hint: "Leads assigned to you", color: "text-blue-600", bg: "bg-blue-50", href: "/user/leads" },
+    { label: "Open Tasks", value: stats.tasks, hint: "Tasks waiting for action", color: "text-amber-600", bg: "bg-amber-50", href: "/user/tasks" },
+    { label: "Won Deals", value: stats.wonDeals, hint: "Closed successfully", color: "text-emerald-600", bg: "bg-emerald-50", href: "/user/pipeline" },
+    { label: "Follow-ups Due", value: stats.followUps, hint: "Scheduled reminders", color: "text-violet-600", bg: "bg-violet-50", href: "/user/followups" },
   ];
 
   return (
     <UserLayout>
       <div className="space-y-8">
-        <div>
-          <h1 className="text-2xl font-semibold text-gray-900">
-            {user ? `Welcome back, ${user.name.split(" ")[0]}` : "Dashboard"}
-          </h1>
-          <p className="text-sm text-gray-500 mt-1">
-            Here&apos;s a snapshot of your sales activity today.
-          </p>
-        </div>
+        <PageHeader
+          title={user ? `Welcome back, ${user.name.split(" ")[0]} 👋` : "Dashboard"}
+          description="Here's a snapshot of your sales activity today."
+          badge="Live overview"
+        />
 
         {loading ? (
-          <div className="text-center py-12 text-gray-400">Loading your stats...</div>
+          <LoadingState message="Loading your stats..." />
         ) : (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {statCards.map((card) => (
-                <Link
-                  key={card.label}
-                  href={card.href}
-                  className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition group"
-                >
-                  <div className={`w-10 h-10 rounded-lg ${card.bg} ${card.color} flex items-center justify-center text-lg font-bold mb-3`}>
-                    {card.value}
-                  </div>
-                  <h3 className="text-sm font-medium text-gray-900">{card.label}</h3>
-                  <p className="text-xs text-gray-400 mt-1">{card.hint}</p>
-                  <p className="text-xs text-blue-600 mt-3 opacity-0 group-hover:opacity-100 transition">
-                    View details →
-                  </p>
-                </Link>
+                <StatCard key={card.label} {...card} />
               ))}
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              <div className="bg-white rounded-xl border border-gray-100 p-6">
-                <h2 className="text-sm font-semibold text-gray-900 mb-2">Quick actions</h2>
-                <p className="text-xs text-gray-500 mb-4">
-                  Jump straight into your most common workflows.
-                </p>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+              <div className="bg-white rounded-2xl border border-slate-100 p-6 card-hover shadow-sm">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                      <path d="M9 2v14M2 9h14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h2 className="text-sm font-semibold text-slate-900">Quick actions</h2>
+                    <p className="text-xs text-slate-400">Jump into your most common workflows</p>
+                  </div>
+                </div>
                 <div className="flex flex-wrap gap-2">
-                  <Link href="/user/leads" className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition">
-                    Add a lead
-                  </Link>
-                  <Link href="/user/tasks" className="px-4 py-2 border border-gray-200 text-sm rounded-lg hover:bg-gray-50 transition">
-                    Create task
-                  </Link>
-                  <Link href="/user/pipeline" className="px-4 py-2 border border-gray-200 text-sm rounded-lg hover:bg-gray-50 transition">
-                    View pipeline
-                  </Link>
+                  <Link href="/user/leads" className="btn-primary px-4 py-2 text-sm">Add a lead</Link>
+                  <Link href="/user/tasks" className="btn-secondary px-4 py-2 text-sm">Create task</Link>
+                  <Link href="/user/pipeline" className="btn-secondary px-4 py-2 text-sm">View pipeline</Link>
                 </div>
               </div>
-              <div className="bg-white rounded-xl border border-gray-100 p-6">
-                <h2 className="text-sm font-semibold text-gray-900 mb-2">Sales tip</h2>
-                <p className="text-sm text-gray-600 leading-relaxed">
-                  Leads with a scheduled follow-up within 48 hours are 3× more likely to convert.
-                  Check your{" "}
-                  <Link href="/user/followups" className="text-blue-600 hover:underline">
-                    follow-ups
-                  </Link>{" "}
-                  to stay on top of every opportunity.
-                </p>
+
+              <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
+                <div className="relative">
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-lg">💡</span>
+                    <h2 className="text-sm font-semibold">Sales tip of the day</h2>
+                  </div>
+                  <p className="text-sm text-blue-100 leading-relaxed">
+                    Leads with a scheduled follow-up within 48 hours are 3× more likely to convert.
+                    Check your{" "}
+                    <Link href="/user/followups" className="text-white font-semibold underline underline-offset-2">
+                      follow-ups
+                    </Link>{" "}
+                    to stay on top of every opportunity.
+                  </p>
+                </div>
               </div>
             </div>
           </>

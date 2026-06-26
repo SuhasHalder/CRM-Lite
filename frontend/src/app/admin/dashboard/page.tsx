@@ -1,8 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import apiClient from "@/lib/api";
 import type { AnalyticsOverview } from "@/lib/types";
 import AdminLayout from "@/components/admin/AdminLayout";
+import PageHeader from "@/components/ui/PageHeader";
+import StatCard from "@/components/ui/StatCard";
+import LoadingState from "@/components/ui/LoadingState";
 
 export default function AdminDashboardPage() {
   const [stats, setStats] = useState<AnalyticsOverview | null>(null);
@@ -24,63 +28,56 @@ export default function AdminDashboardPage() {
   const statCards = stats
     ? [
         { label: "Total Leads", value: stats.totalLeads, hint: "Across all team members", color: "text-blue-600", bg: "bg-blue-50" },
-        { label: "Team Size", value: stats.totalUsers, hint: "Active users", color: "text-green-600", bg: "bg-green-50" },
-        { label: "Won Deals", value: stats.wonDeals, hint: "Successfully closed", color: "text-purple-600", bg: "bg-purple-50" },
+        { label: "Team Size", value: stats.totalUsers, hint: "Active users", color: "text-emerald-600", bg: "bg-emerald-50" },
+        { label: "Won Deals", value: stats.wonDeals, hint: "Successfully closed", color: "text-violet-600", bg: "bg-violet-50" },
         { label: "Open Tasks", value: stats.totalTasks - stats.completedTasks, hint: "Pending completion", color: "text-amber-600", bg: "bg-amber-50" },
         { label: "Completed Tasks", value: stats.completedTasks, hint: "Marked as done", color: "text-teal-600", bg: "bg-teal-50" },
-        { label: "Task Completion", value: `${stats.taskCompletionRate}%`, hint: "Team productivity rate", color: "text-indigo-600", bg: "bg-indigo-50" },
+        { label: "Task Completion", value: `${stats.taskCompletionRate}%`, hint: "Team productivity rate", color: "text-indigo-600", bg: "bg-indigo-50", trend: { value: `${stats.taskCompletionRate}%`, positive: stats.taskCompletionRate >= 50 } },
       ]
     : [];
 
   return (
     <AdminLayout>
       <div className="space-y-8">
-        <div>
-          <h1 className="text-2xl font-semibold text-gray-900">Team Overview</h1>
-          <p className="text-sm text-gray-500 mt-1">
-            Monitor pipeline health, team activity, and conversion metrics at a glance.
-          </p>
-        </div>
+        <PageHeader
+          title="Team Overview"
+          description="Monitor pipeline health, team activity, and conversion metrics at a glance."
+          badge="Admin dashboard"
+        />
 
         {loading ? (
-          <div className="text-center py-12 text-gray-400">Loading team analytics...</div>
+          <LoadingState message="Loading team analytics..." />
         ) : stats ? (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {statCards.map((card) => (
-                <div
-                  key={card.label}
-                  className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm"
-                >
-                  <div className={`w-10 h-10 rounded-lg ${card.bg} ${card.color} flex items-center justify-center text-sm font-bold mb-3`}>
-                    {typeof card.value === "number" && card.value > 99 ? "99+" : card.value}
-                  </div>
-                  <h3 className="text-sm font-medium text-gray-900">{card.label}</h3>
-                  <p className="text-xs text-gray-400 mt-1">{card.hint}</p>
-                </div>
+                <StatCard key={card.label} {...card} />
               ))}
             </div>
 
-            <div className="bg-white rounded-xl border border-gray-100 p-6">
-              <h2 className="text-sm font-semibold text-gray-900 mb-2">Admin quick links</h2>
-              <p className="text-xs text-gray-500 mb-4">
-                Common management tasks for your sales team.
-              </p>
+            <div className="bg-white rounded-2xl border border-slate-100 p-6 card-hover shadow-sm">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <path d="M3 9h12M9 3v12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                  </svg>
+                </div>
+                <div>
+                  <h2 className="text-sm font-semibold text-slate-900">Admin quick links</h2>
+                  <p className="text-xs text-slate-400">Common management tasks for your sales team</p>
+                </div>
+              </div>
               <div className="flex flex-wrap gap-2">
-                <a href="/admin/leads" className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition">
-                  Manage leads
-                </a>
-                <a href="/admin/users" className="px-4 py-2 border border-gray-200 text-sm rounded-lg hover:bg-gray-50 transition">
-                  View team
-                </a>
-                <a href="/admin/analytics" className="px-4 py-2 border border-gray-200 text-sm rounded-lg hover:bg-gray-50 transition">
-                  Full analytics
-                </a>
+                <Link href="/admin/leads" className="btn-primary px-4 py-2 text-sm">Manage leads</Link>
+                <Link href="/admin/users" className="btn-secondary px-4 py-2 text-sm">View team</Link>
+                <Link href="/admin/analytics" className="btn-secondary px-4 py-2 text-sm">Full analytics</Link>
               </div>
             </div>
           </>
         ) : (
-          <div className="text-center py-12 text-gray-400">No analytics data available yet.</div>
+          <div className="text-center py-16 text-slate-400 bg-white rounded-2xl border border-slate-100">
+            No analytics data available yet.
+          </div>
         )}
       </div>
     </AdminLayout>

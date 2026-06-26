@@ -9,9 +9,9 @@ export default function UserLayout({
   return (
     <div className="flex">
       <UserSidebar />
-      <div className="flex-1 min-h-screen bg-gray-50">
+      <div className="flex-1 min-h-screen app-bg">
         <UserNavbar />
-        <div className="p-6">{children}</div>
+        <div className="p-6 lg:p-8">{children}</div>
       </div>
     </div>
   );

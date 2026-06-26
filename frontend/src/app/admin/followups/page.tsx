@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import AdminLayout from "@/components/admin/AdminLayout";
+import PageHeader from "@/components/ui/PageHeader";
 
 const followUpsData = [
   {
@@ -53,48 +54,38 @@ export default function FollowUpsPage() {
   return (
     <AdminLayout>
       <div className="space-y-8">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div>
-            <h1 className="text-4xl font-bold text-gray-800">
-              Follow-ups Management
-            </h1>
-
-            <p className="text-gray-500 mt-2">
-              Manage customer communication and track follow-up activities.
-            </p>
-          </div>
-
-          <button className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl shadow-md transition">
-            + Schedule Follow-up
-          </button>
-        </div>
+        <PageHeader
+          title="Follow-ups Management"
+          description="Manage customer communication and track follow-up activities."
+          badge="Communications"
+          action={<button className="btn-primary px-5 py-2.5 text-sm">+ Schedule Follow-up</button>}
+        />
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
-          <div className="bg-white rounded-2xl shadow-md p-6">
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm card-hover p-6">
             <h3 className="text-sm text-gray-500">Total Follow-ups</h3>
             <p className="text-4xl font-bold text-blue-600 mt-3">84</p>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-md p-6">
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm card-hover p-6">
             <h3 className="text-sm text-gray-500">Pending</h3>
             <p className="text-4xl font-bold text-yellow-500 mt-3">22</p>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-md p-6">
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm card-hover p-6">
             <h3 className="text-sm text-gray-500">Upcoming</h3>
             <p className="text-4xl font-bold text-indigo-600 mt-3">14</p>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-md p-6">
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm card-hover p-6">
             <h3 className="text-sm text-gray-500">Completed</h3>
             <p className="text-4xl font-bold text-green-600 mt-3">48</p>
           </div>
         </div>
 
         {/* Search + Filter */}
-        <div className="bg-white rounded-2xl shadow-md p-6">
+        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm card-hover p-6">
           <div className="flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
             <input
               type="text"
@@ -120,7 +111,7 @@ export default function FollowUpsPage() {
         </div>
 
         {/* Follow-ups Table */}
-        <div className="bg-white rounded-2xl shadow-md overflow-hidden">
+        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm card-hover overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead className="bg-gray-50 border-b">
@@ -198,7 +189,7 @@ export default function FollowUpsPage() {
         </div>
 
         {/* Bottom Summary */}
-        <div className="bg-white rounded-2xl shadow-md p-6">
+        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm card-hover p-6">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div>
               <h2 className="text-2xl font-bold text-gray-800">
